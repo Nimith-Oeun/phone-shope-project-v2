@@ -1,0 +1,13 @@
+# This file is used to insert data into the brands table from the csv file
+
+databaseChangeLog:
+  - changeSet:
+      id: 002_insert_brands
+      author: Nimith@gmail.com
+      changes:
+        - loadData:
+            file: db/data/002_brands.csv
+            tableName: brands
+            separator: ","
+            quotchar: '"'
+            encoding: UTF-8

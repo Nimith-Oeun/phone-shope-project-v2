@@ -1,0 +1,143 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003_insert_table
+      author: Nimith@gmail.com
+      runOnChange: true
+      changes:
+        - createTable: # Create the colors table
+            tableName: colors
+            columns:
+              - column:
+                  name: c_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: true
+              - column:
+                  name: c_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+        - createTable: # Create the product table
+            tableName: products
+            columns:
+              - column:
+                  name: p_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: true
+              - column:
+                  name: p_name
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: true
+              - column:
+                  name: sale_price
+                  type: MONEY
+                  constraints:
+                    nullable: true
+              - column:
+                  name: image_path
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+
+              - column:
+                  name: available_units
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: model_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_products_models
+                    nullable: true
+              - column:
+                  name: color_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_products_colors
+                    nullable: true
+        - createTable: # Create the productImportHistory table
+            tableName: product_import_history
+            columns:
+              - column:
+                  name: import_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: true
+              - column:
+                  name: import_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+              - column:
+                  name: imported_units
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: price_per_unit
+                  type: MONEY
+                  constraints:
+                    nullable: true
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_productImportHistory_products
+                    nullable: true
+        - createTable: # Create the sale table
+            tableName: sales
+            columns:
+              - column:
+                  name: sale_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: true
+              - column:
+                  name: sold_date
+                  type: datetime
+                  constraints:
+                    nullable: true
+        - createTable: # Create the saleDetail table
+            tableName: sale_detail
+            columns:
+              - column:
+                  name: sd_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: true
+              - column:
+                  name: sale_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_saleDetail_sale
+                    nullable: true
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_saleDetail_products
+                    nullable: true
+              - column:
+                  name: sold_amount
+                  type: MONEY
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sold_units
+                  type: BIGINT
+                  constraints:
+                    nullable: true

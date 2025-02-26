@@ -1,0 +1,44 @@
+# This file is used to create the initial schema of the database
+
+databaseChangeLog:
+  - changeSet:
+      id: 001_init_db_schema
+      author: Nimith@gmail.com
+      changes:
+        - createTable: # Create the brands table
+            tableName: brands
+            columns:
+              - column:
+                  name: b_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: b_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - createTable: # Create the models table
+            tableName: models
+            columns:
+              - column:
+                  name: m_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: m_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: brand_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_models_brands
+                    references: brands(b_id)
+                    nullable: false

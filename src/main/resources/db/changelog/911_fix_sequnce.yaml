@@ -1,0 +1,11 @@
+#this file is used to fix duplicate ID when import from csv file and post from client to the table
+
+databaseChangeLog:
+  - changeSet:
+      id: 911-fix-sequence
+      author: Nimith@gmail.com
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: |
+              SELECT setval('brands_b_id_seq', (SELECT MAX(b_id) FROM brands));

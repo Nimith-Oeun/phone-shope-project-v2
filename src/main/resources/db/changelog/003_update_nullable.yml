@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003_update_nullable
+      author: Nimith@gmail.com
+      changes:
+        - addColumn:
+            tableName: product_import_history
+            columns:
+              - column:
+                  name: version
+                  type: INT
+                  constraints:
+                    nullable: false
+                  defaultValueNumeric: 0

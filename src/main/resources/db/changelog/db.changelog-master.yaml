@@ -1,0 +1,18 @@
+#this file is the main file that will be used to run the changelog files
+
+databaseChangeLog:
+  - include:
+      file: db/changelog/001_init_db_schema.yml
+  - include:
+      file: db/changelog/002_insert_brands.yml
+  - include:
+        file: db/changelog/003_insert_table.yml
+#  - include:
+#        file: db/changelog/003_update_nullable.yml
+#  - include:
+#        file: db/changelog/003_change_import_date_type.yml
+  - include:
+        file: db/changelog/004_insert_color.yml
+  - include:
+      file: db/changelog/911_fix_sequnce.yaml
+

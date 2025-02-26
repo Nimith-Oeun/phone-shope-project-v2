@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004_insert_color
+      author: Nimith@gmail.com
+      changes:
+        - loadData:
+            file: db/data/004_insert_color.csv
+            tableName: colors
+            separator: ","
+            quotchar: '"'
+            encoding: UTF-8

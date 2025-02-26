@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003_change_import_date_type
+      author: Nimith@gmail.com
+      changes:
+        - modifyDataType:
+            tableName: product_import_history
+            columnName: import_date
+            newDataType: DATE
