@@ -1,13 +1,10 @@
 package com.unimal.phone_shope_demo.mapper;
 
-import com.unimal.phone_shope_demo.model.Brand;
 import com.unimal.phone_shope_demo.model.Model;
 import com.unimal.phone_shope_demo.model.dto.ModelDTO;
 import com.unimal.phone_shope_demo.service.BrandService;
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 
 

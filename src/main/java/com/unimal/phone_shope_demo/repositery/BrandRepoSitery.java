@@ -15,5 +15,6 @@ public interface BrandRepoSitery extends JpaRepository<Brand, Long> , JpaSpecifi
     * if you want to find by name or something else you can use this
     * */
     List<Brand> findByNameIgnoreCase(String name);
+    List<Brand> findByNameLike(String name);
     Brand findBrandById(Long id);
 }

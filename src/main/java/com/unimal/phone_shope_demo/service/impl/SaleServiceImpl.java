@@ -1,6 +1,7 @@
 package com.unimal.phone_shope_demo.service.impl;
 
 import com.unimal.phone_shope_demo.exception.ApiException;
+import com.unimal.phone_shope_demo.exception.ResoureNoteFoundException;
 import com.unimal.phone_shope_demo.model.Product;
 import com.unimal.phone_shope_demo.model.Sale;
 import com.unimal.phone_shope_demo.model.SaleDetail;
@@ -27,6 +28,7 @@ public class SaleServiceImpl implements SellService {
     private final ProductRepositery productRepositery;
     private final SaleRepositery saleRepositery;
     private final SaleDetailRepositery saleDetailRepositery;
+
     @Override
     public void sellProduct(SaleDTO saleDTO) {
         List<Long> productId = saleDTO.getProductSold()
@@ -35,13 +37,13 @@ public class SaleServiceImpl implements SellService {
         // validation
         productId.forEach(productService::getById); // check if product exist
         List<Product> products = productRepositery.findAllById(productId);// get all product
-        Map<Long , Product> productMap = products.stream()
+        Map<Long, Product> productMap = products.stream()
                 .collect(Collectors.toMap(Product::getId, Function.identity()));// this function will convert list to map
 
         //validate Stock
         saleDTO.getProductSold().forEach(ps -> {
             Product product = productMap.get(ps.getProductId());// get product from map
-            if (product.getAvailableUnits() < ps.getQuantity()){ // check if product is available
+            if (product.getAvailableUnits() < ps.getQuantity()) { // check if product is available
                 throw new ApiException(HttpStatus.BAD_REQUEST,
                         "Product %s is out of stock".formatted(product.getName()));
             }
@@ -69,6 +71,8 @@ public class SaleServiceImpl implements SellService {
         });
 
     }
+
+
 //    private void saveSale(SaleDTO saleDTO) {
 //        Sale sale = new Sale();
 //        sale.setSoldDate(saleDTO.getSoldDate());// set sold date
@@ -100,4 +104,43 @@ public class SaleServiceImpl implements SellService {
 //        });
 //
 //    }
+
+    @Override
+    public Sale getById(Long saleId) {
+        return saleRepositery.findById(saleId)
+                .orElseThrow(() -> new ResoureNoteFoundException("sale", saleId));
+    }
+
+    @Override
+    public void cancelSale(Long saleId) {
+        //update sale status
+        Sale sale = getById(saleId);
+        sale.setActive(false);
+        saleRepositery.save(sale);
+
+        //update stock
+        List<SaleDetail> saleDetail = saleDetailRepositery.findBySaleId(saleId);
+        //get all product id from saleDetail
+        List<Long> productIds = saleDetail.stream()
+                .map(sd -> sd.getProduct().getId())
+                .toList();
+
+        //find all product by id from productIds
+        List<Product> products = productRepositery.findAllById(productIds);
+
+        //convert list to map
+        Map<Long, Product> productMap = products.stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+
+        //update stock
+        saleDetail.forEach(sd -> {
+            Product product = productMap.get(sd.getProduct().getId());
+            Integer availableUnits = product.getAvailableUnits() + sd.getUnits();
+            product.setAvailableUnits(availableUnits);
+            productRepositery.save(product);
+
+        });
+    }
+
+
 }

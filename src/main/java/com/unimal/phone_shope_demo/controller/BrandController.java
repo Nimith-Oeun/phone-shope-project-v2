@@ -13,6 +13,7 @@ import com.unimal.phone_shope_demo.service.ModelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class BrandController {
     private final ModelService modelService;
     private final ModelEntityMapper modelMapper;
 
+    @PreAuthorize("hasAuthority('brand:write')") //this annotation is allowed who have the permission write to access this method
     @PostMapping("")
     public ResponseEntity<?>create(@RequestBody BrandDTO brandto){
         Brand createBrand = BrandMap.INSTANCE.mapBrandDtoToBrand(brandto);
@@ -55,6 +57,7 @@ public class BrandController {
     }
 
      */
+    @PreAuthorize("hasAuthority('brand:read')") //this annotation is allowed who have the permission read to access this method
     @GetMapping("") // use this for Filter and getAllBrand with pageination in 1 function with JpaSpecification
     public ResponseEntity<?>getBrand(@RequestParam Map<String,String> param){
         /*  this sataement use for filter and getAllBrand without pageination

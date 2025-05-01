@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007_insert_table-permission
+      author: Nimith
+      changes:
+        - createTable:
+            tableName: permissions
+            columns:
+              - column:
+                  name: permission_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: permission_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true

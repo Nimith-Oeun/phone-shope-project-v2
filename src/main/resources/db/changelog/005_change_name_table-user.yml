@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005_change_name_table-user
+      author: Nimith@gmail.com
+      changes:
+        - renameTable:
+            oldTableName: user
+            newTableName: users

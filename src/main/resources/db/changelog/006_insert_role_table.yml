@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006_insert_role_table
+      author: Nimith
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - createTable:
+            tableName: roles_permissions
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    referencedTableName: roles
+                    referencedColumnNames: role_id
+                    foreignKeyName: fk_role_permission_role
+              - column:
+                  name: permission_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    referencedTableName: permissions
+                    referencedColumnNames: permission_id
+                    foreignKeyName: fk_role_permission_permission

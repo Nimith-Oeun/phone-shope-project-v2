@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005_update_table_user
+      author: Nimith
+      changes:
+        - dropColumn:
+            tableName: users
+            columnName: role
+        - createTable:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    referencedTableName: users
+                    referencedColumnNames: user_id
+                    foreignKeyName: fk_user_role_user
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    referencedTableName: roles
+                    referencedColumnNames: role_id
+                    foreignKeyName: fk_user_role_role

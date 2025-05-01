@@ -1,5 +1,6 @@
 package com.unimal.phone_shope_demo.controller;
 
+import com.unimal.phone_shope_demo.model.dto.ExpenseReportDTO;
 import com.unimal.phone_shope_demo.model.dto.ProductReportDTO;
 import com.unimal.phone_shope_demo.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,12 @@ public class ReportController {
                                             @DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("endDate") LocalDate endDate) {
         List<ProductReportDTO> productSold = reportService.getProductReport(startDate, endDate);
         return ResponseEntity.ok(productSold);
+    }
+
+    @GetMapping("expense/{startDate}/{endDate}")
+    public ResponseEntity<?> expenseReport(@DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("startDate") LocalDate startDate,
+                                           @DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("endDate") LocalDate endDate) {
+        List<ExpenseReportDTO> exReport = reportService.getExpenseReport(startDate, endDate);
+        return ResponseEntity.ok(exReport);
     }
 }

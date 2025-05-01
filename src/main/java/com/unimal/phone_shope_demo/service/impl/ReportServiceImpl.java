@@ -1,11 +1,16 @@
 package com.unimal.phone_shope_demo.service.impl;
 
+import com.unimal.phone_shope_demo.jpa_spacifiction.FilterProductImport;
 import com.unimal.phone_shope_demo.jpa_spacifiction.FilterSaleDetail;
+import com.unimal.phone_shope_demo.jpa_spacifiction.ProductImportSpec;
 import com.unimal.phone_shope_demo.jpa_spacifiction.SaleDetailSpec;
 import com.unimal.phone_shope_demo.model.Product;
+import com.unimal.phone_shope_demo.model.ProductImportHistory;
 import com.unimal.phone_shope_demo.model.SaleDetail;
+import com.unimal.phone_shope_demo.model.dto.ExpenseReportDTO;
 import com.unimal.phone_shope_demo.model.dto.ProductReportDTO;
 import com.unimal.phone_shope_demo.projection.ProductSold;
+import com.unimal.phone_shope_demo.repositery.ProductImportRepositery;
 import com.unimal.phone_shope_demo.repositery.ProductRepositery;
 import com.unimal.phone_shope_demo.repositery.SaleDetailRepositery;
 import com.unimal.phone_shope_demo.repositery.SaleRepositery;
@@ -19,6 +24,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,6 +34,7 @@ public class ReportServiceImpl implements ReportService {
     private final SaleRepositery saleRepositery;
     private final SaleDetailRepositery saleDetailRepositery;
     private final ProductRepositery productRepositery;
+    private final ProductImportRepositery productImportRepositery;
 
     /* this function for get report using Raw query
     @Override
@@ -83,5 +90,50 @@ public class ReportServiceImpl implements ReportService {
         }
 
         return list;
+    }
+
+    @Override
+    public List<ExpenseReportDTO> getExpenseReport(LocalDate startDate, LocalDate endDate) {
+        List<ExpenseReportDTO> epenseList = new ArrayList<>();
+        FilterProductImport filterProductImport = new FilterProductImport();
+        filterProductImport.setStartDate(startDate);
+        filterProductImport.setEndDate(endDate);
+        Specification<ProductImportHistory> spec = new ProductImportSpec(filterProductImport);
+        List<ProductImportHistory> importHistory = productImportRepositery.findAll(spec);
+
+        // this use for get product id
+        Set<Long> productIds = importHistory.stream()
+                .map(ProductImportHistory::getProduct)
+                .map(Product::getId)
+                .collect(Collectors.toSet());
+
+        // this use for get product id and product name and store in map
+        Map<Long, Product> productMap = productRepositery.findAllById(productIds).stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+
+        // this use for grouping product and import history
+        Map<Product, List<ProductImportHistory>> importMap = importHistory.stream()
+                .collect(Collectors.groupingBy(ProductImportHistory::getProduct));
+
+        // this loop for get product id and product name and store in list
+        for (var entry : importMap.entrySet()) {
+            Product product = productMap.get(entry.getKey().getId());
+            List<ProductImportHistory> importList = entry.getValue();
+
+            int totalUnite = importList.stream()
+                    .mapToInt(ProductImportHistory::getImportedUnits)
+                    .sum();
+
+            double totalAmount = importList.stream().mapToDouble(x -> x.getImportedUnits() * x.getPricePerUnit().doubleValue())
+                    .sum();
+
+            ExpenseReportDTO xReportDTO = new ExpenseReportDTO();
+            xReportDTO.setProductId(product.getId());
+            xReportDTO.setProductName(product.getName());
+            xReportDTO.setTotalUnits(totalUnite);
+            xReportDTO.setTotalAmount(BigDecimal.valueOf(totalAmount));
+            epenseList.add(xReportDTO);
+        }
+        return epenseList;
     }
 }

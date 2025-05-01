@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003_add_column_into_saleTable
+      author: Nimith@gmail.com
+      changes:
+        - addColumn:
+            tableName: sales
+            columns:
+              - name: active
+                type: BOOLEAN
+                constraints:
+                  nullable: false
+                  defaultValueBoolean: true

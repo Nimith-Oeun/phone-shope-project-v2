@@ -14,5 +14,17 @@ databaseChangeLog:
   - include:
         file: db/changelog/004_insert_color.yml
   - include:
+        file: db/changelog/005_insert_table_user.yml
+#  - include:
+#        file: db/changelog/005_change_name_table-user.yml
+  - include:
+      file: db/changelog/007_insert_table_permission.yml
+#  - include:
+#        file: db/changelog/005_update_table_user.yml
+  - include:
+      file: db/changelog/006_insert_role_table.yml
+  - include:
+        file: db/changelog/005_update_table_user.yml
+  - include:
       file: db/changelog/911_fix_sequnce.yaml
 
