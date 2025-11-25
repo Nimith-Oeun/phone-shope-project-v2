@@ -5,7 +5,7 @@ services:
     image: postgres:15
     container_name: db
     environment:
-      POSTGRES_USER: shop
+      POSTGRES_USER: shope
       POSTGRES_PASSWORD: P@ssw0rd()
       POSTGRES_DB: phone_shope
     networks:
@@ -14,13 +14,13 @@ services:
       - "5432:5432"  # Mapping to host port for debugging if needed
 
   api-shope:
-    image: api-shope  # Assuming the image is built and tagged as 'api-shope:latest'
-    container_name: api-shope
+    image: phone_shop_api  # Assuming the image is built and tagged as 'api-shope:latest'
+    container_name: application
     depends_on:
       - db  # Ensures db starts before the Spring Boot application
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/phone_shope
-      SPRING_DATASOURCE_USERNAME: shop
+      SPRING_DATASOURCE_USERNAME: shope
       SPRING_DATASOURCE_PASSWORD: P@ssw0rd()
 #      SPRING_LIQUIBASE_URL: jdbc:postgresql://db:5432/phone_shope
 #      SPRING_LIQUIBASE_USER: shop

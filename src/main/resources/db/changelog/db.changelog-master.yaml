@@ -1,34 +1,53 @@
+#=======================================================================
 #this file is the main file that will be used to run the changelog files
+#=======================================================================
 
 databaseChangeLog:
+
+  # Create Tables
+
   - include:
       file: db/changelog/001_init_db_schema.yml
+
   - include:
       file: db/changelog/002_insert_brands.yml
+
+  - include:
+      file: db/changelog/007_insert_table_permission.yml
+
+  - include:
+      file: db/changelog/002_insert_RoleTable.yml
+
+  - include:
+      file: db/changelog/002_insert_userTable.yml
+
+  - include:
+      file: db/changelog/003_insert_table.yml
+
   - include:
       file: db/changelog/004_insert_color.yml
-##  - include:
-##      file: db/changelog/002_insert_userTable.yml
-##  - include:
-##        file: db/changelog/002_insert_RoleTable.yml
-#  - include:
-#        file: db/changelog/003_insert_table.yml
-#  - include:
-#        file: db/changelog/006_insert_role_table.yml
-##  - include:
-##        file: db/changelog/003_update_nullable.yml
-##  - include:
-##        file: db/changelog/003_change_import_date_type.yml
-#  - include:
-#        file: db/changelog/005_insert_table_user.yml
-##  - include:
-##        file: db/changelog/005_change_name_table-user.yml
-#  - include:
-#      file: db/changelog/007_insert_table_permission.yml
-##  - include:
-##        file: db/changelog/005_update_table_user.yml
-##  - include:
-##        file: db/changelog/005_update_table_user.yml
-#  - include:
-#      file: db/changelog/911_fix_sequnce.yaml
+
+  # Update Tables
+
+  - include:
+        file: db/changelog/003_update_nullable.yml
+
+  - include:
+        file: db/changelog/003_change_import_date_type.yml
+
+  - include:
+      file: db/changelog/911_fix_sequnce.yaml
+
+  # =================================================================
+
+  # Old bug fixes
+
+  #  - include:
+  #        file: db/changelog/006_insert_role_table.ymlv
+  #  - include:
+  #        file: db/changelog/005_insert_table_user.yml
+  ##  - include:
+  ##        file: db/changelog/005_change_name_table-user.yml
+  ##  - include:
+  ##        file: db/changelog/005_update_table_user.yml
 
