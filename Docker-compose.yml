@@ -5,30 +5,39 @@ services:
     image: postgres:15
     container_name: db
     environment:
-      POSTGRES_USER: shope
+      POSTGRES_USER: shop
       POSTGRES_PASSWORD: P@ssw0rd()
       POSTGRES_DB: phone_shope
     networks:
       - app-network
     ports:
-      - "5432:5432"  # Mapping to host port for debugging if needed
+      - "5432:5432"
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shop -d phone_shope"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   api-shope:
-    image: phone_shop_api  # Assuming the image is built and tagged as 'api-shope:latest'
+    build: .
+    image: phone_shop_api:v1
     container_name: application
     depends_on:
-      - db  # Ensures db starts before the Spring Boot application
+      db:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/phone_shope
-      SPRING_DATASOURCE_USERNAME: shope
+      SPRING_DATASOURCE_USERNAME: shop
       SPRING_DATASOURCE_PASSWORD: P@ssw0rd()
-#      SPRING_LIQUIBASE_URL: jdbc:postgresql://db:5432/phone_shope
-#      SPRING_LIQUIBASE_USER: shop
-#      SPRING_LIQUIBASE_PASSWORD: P@ssw0rd()
+    #      SPRING_LIQUIBASE_URL: jdbc:postgresql://db:5432/phone_shope
+    #      SPRING_LIQUIBASE_USER: shop
+    #      SPRING_LIQUIBASE_PASSWORD: P@ssw0rd()
     networks:
       - app-network
     ports:
-      - "8081:8081"  # External port for accessing the Spring Boot app
+      - "8081:8081"
 
 networks:
   app-network:
